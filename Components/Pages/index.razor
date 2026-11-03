@@ -1,0 +1,79 @@
+@page "/Index"
+@inject NavigationManager Navigation
+@rendermode InteractiveServer
+
+<PageTitle>Examen segundo parcial</PageTitle>
+
+<div class="container-fluid mt-4">
+    <div class="card shadow-sm">
+        <div class="card-header d-flex justify-content-between align-items-center bg-light">
+            <h5 class="card-title mb-0">Consultas</h5>
+            <a class="btn btn-primary" href="/Crear">
+                <span class="bi bi-plus-square"></span>
+                Crear
+            </a>
+        </div>
+
+        @*Formulario*@
+        <div class="card-body">
+            
+            @*Labels*@
+            <div class="row">
+                <div class="col-3">
+                    <label class="form-label" for="Filtro">
+                        <strong>Filtrar por</strong>
+                    </label>
+                </div>
+
+                <div class="col-4">
+                    <label class="form-label" for="valorFiltro">
+                        <strong>Busqueda</strong>
+                    </label>
+                </div>
+            </div>
+
+            @*Inputs y botones*@
+            <div class="row">
+                @*Filtro*@
+                <div class="col-3">
+                    <select class="form-select" @bing="filtro">
+                        <option value="">
+                            Elija una opcion
+                        </option>
+                    </select>
+                </div>
+
+                @*Busqueda*@
+                <div class="col-4">
+
+                    <div class="input-gruop">
+                        <input class="form-control"
+                                @bind="valorFiltro"
+                                placeholder="Buscar" />
+
+                        <button type="button"
+                                class="btn btn-outline-primary"
+                                @onclick="">
+                            Buscar
+                        </button>
+                    </div>
+                </div>
+
+                @*Restablecer*@
+                <div class="col-auto">
+                    <button type="button"
+                            class="btn btn-outline-secondary"
+                            @onclick="">
+                        Restablecer
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code{
+    public string? filtro { get; set; }
+    public string? valorFiltro { get; set; }
+
+}
