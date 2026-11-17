@@ -46,7 +46,7 @@ public class VentaService(
             return false;
 
         contexto.Ventas.Add(venta);
-        await AjustarStock(contexto, venta.Detalles, -1);   // la venta RESTA stock
+        await AjustarStock(contexto, venta.Detalles, -1);  
 
         return await contexto.SaveChangesAsync() > 0;
     }
@@ -103,6 +103,7 @@ public class VentaService(
         await using var contexto = await contextFactory.CreateDbContextAsync();
         return await contexto.Ventas
             .Include(v => v.Detalles)
+            .ThenInclude(d => d.Productos)
             .Where(criterio)
             .OrderByDescending(v => v.VentaId)
             .AsNoTracking()
@@ -199,6 +200,7 @@ public class VentaService(
     public async Task<List<Productos>> ListarProductos()
     {
         await using var contexto = await contextFactory.CreateDbContextAsync();
-        return await contexto.Productos.AsNoTracking().ToListAsync();
+        return await contexto.Productos.AsNoTracking()
+        .ToListAsync();
     }
 }

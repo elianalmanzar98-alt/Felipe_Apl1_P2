@@ -1,0 +1,51 @@
+@page "/Producto/Index"
+@using Felipe_Ap1_P2.Models
+@using Felipe_Ap1_P2.Services
+@inject ProductoService productoService
+@rendermode InteractiveServer
+
+<PageTitle>Inventario de Productos</PageTitle>
+
+<div class="card shadow-sm m-4">
+    <div class="card-header">
+        <h5 class="mb-0 fw-normal">Inventario de Productos</h5>
+    </div>
+
+    <div class="card-body">
+        <p class="text-muted small">Consulta el precio y las existencias actuales.</p>
+
+        <table class="table table-bordered table-striped align-middle">
+            <thead>
+                <tr>
+                    <th>ProductoId</th>
+                    <th>Producto</th>
+                    <th>Precio</th>
+                    <th>Stock disponible</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var p in lista)
+                {
+                    <tr>
+                        <td>@p.ProductoId</td>
+                        <td>@p.Nombre</td>
+                        <td>@("$" + p.Precio.ToString("N2"))</td>
+                        <td>@p.Stock</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <strong>Cantidad de productos:</strong> @lista.Count
+    </div>
+</div>
+
+@code {
+    private List<Productos> lista = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var resultado = await productoService.GetList(p => true);
+        lista = resultado.Value ?? new List<Productos>();
+    }
+}

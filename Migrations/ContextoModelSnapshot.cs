@@ -41,16 +41,16 @@ namespace Felipe_Ap1_P2.Migrations
                         new
                         {
                             ProductoId = 1,
-                            Nombre = "Frappuccino Mocha 281 ml",
+                            Nombre = "Cafe Negro",
                             Precio = 110.00m,
-                            Stock = 50
+                            Stock = 100
                         },
                         new
                         {
                             ProductoId = 2,
-                            Nombre = "Frappuccino Vainilla 281 ml",
+                            Nombre = "Cafe Latte",
                             Precio = 110.00m,
-                            Stock = 50
+                            Stock = 80
                         },
                         new
                         {
@@ -62,23 +62,30 @@ namespace Felipe_Ap1_P2.Migrations
                         new
                         {
                             ProductoId = 4,
-                            Nombre = "Doubleshot Espresso 200 ml",
+                            Nombre = "Double Espresso 200 ml",
                             Precio = 125.00m,
-                            Stock = 30
+                            Stock = 45
                         },
                         new
                         {
                             ProductoId = 5,
-                            Nombre = "Cold Brew Original 330 ml",
+                            Nombre = "Caramelo Nacchiato",
                             Precio = 135.00m,
-                            Stock = 25
+                            Stock = 30
                         },
                         new
                         {
                             ProductoId = 6,
                             Nombre = "Latte Vainilla 220 ml",
                             Precio = 100.00m,
-                            Stock = 60
+                            Stock = 70
+                        },
+                        new
+                        {
+                            ProductoId = 7,
+                            Nombre = "Capuchino",
+                            Precio = 180.00m,
+                            Stock = 90
                         });
                 });
 

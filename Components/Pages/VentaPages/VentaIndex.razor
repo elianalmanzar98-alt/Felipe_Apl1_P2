@@ -1,0 +1,137 @@
+@page "/Venta/Index"
+@using Felipe_Ap1_P2.Models
+@using Felipe_Ap1_P2.Services
+@inject VentaService ventaService
+@rendermode InteractiveServer
+
+<PageTitle>Consulta de ventas</PageTitle>
+
+<div class="card shadow-sm m-4">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0 fw-normal">Consulta de ventas</h5>
+        <a href="/Venta/Registro" class="btn btn-primary btn-sm">Registrar venta</a>
+    </div>
+
+    <div class="card-body">
+        @if (!string.IsNullOrEmpty(mensaje))
+        {
+            <div class="alert alert-success">@mensaje</div>
+        }
+
+        <div class="row g-2 mb-3 align-items-end">
+            <div class="col-md-2">
+                <label class="form-label fw-bold">VentaId</label>
+                <input type="number" class="form-control form-control-sm" @bind="filtroVentaId" />
+            </div>
+            <div class="col-md-3">
+                <label class="form-label fw-bold">Concepto</label>
+                <input type="text" class="form-control form-control-sm" placeholder="Producto u observación" @bind="filtroConcepto" />
+            </div>
+            <div class="col-md-2">
+                <label class="form-label fw-bold">Fecha desde</label>
+                <input type="date" class="form-control form-control-sm" @bind="fechaDesde" @bind:format="yyyy-MM-dd" />
+            </div>
+            <div class="col-md-2">
+                <label class="form-label fw-bold">Fecha hasta</label>
+                <input type="date" class="form-control form-control-sm" @bind="fechaHasta" @bind:format="yyyy-MM-dd" />
+            </div>
+            <div class="col-md-3">
+                <button class="btn btn-outline-primary btn-sm" @onclick="Buscar">Buscar</button>
+                <button class="btn btn-outline-secondary btn-sm" @onclick="Restablecer">Restablecer</button>
+            </div>
+        </div>
+
+        <table class="table table-bordered table-striped align-middle">
+            <thead>
+                <tr>
+                    <th>VentaId</th>
+                    <th>Fecha</th>
+                    <th>Observación</th>
+                    <th>Productos</th>
+                    <th>Total</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var v in lista)
+                {
+                    <tr>
+                        <td>@v.VentaId</td>
+                        <td>@v.Fecha.ToString("yyyy-MM-dd")</td>
+                        <td>@v.Observacion</td>
+                        <td>@string.Join(" , ", v.Detalles.Select(d=>$"{d.Productos?.Nombre} x{d.Cantidad}"))</td>
+                        <td>@("$" + v.Total.ToString("N2"))</td>
+                        <td>
+                            <a href="/Venta/Registro/@v.VentaId" class="btn btn-outline-warning btn-sm">Modificar</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <div class="d-flex justify-content-between">
+            <span><strong>Cantidad:</strong> @lista.Count</span>
+            <span><strong>Total vendido:</strong> @("$" + lista.Sum(v => v.Total).ToString("N2"))</span>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter, SupplyParameterFromQuery(Name = "mensaje")]
+    public string? Aviso { get; set; }
+
+    private List<Ventas> lista = new();
+
+    private int? filtroVentaId;
+    private string filtroConcepto = string.Empty;
+    private DateTime? fechaDesde;
+    private DateTime? fechaHasta;
+
+    private string? mensaje;
+
+    protected override async Task OnInitializedAsync()
+    {
+        mensaje = Aviso switch
+        {
+            "guardada" => "La venta se guardo correctamente",
+            "eliminada" => "La venta se elimino correctamente. El stock fue devuelto",
+            _ => null
+        };
+
+        await Buscar();
+    }
+
+    
+    
+    private static string ResumenProductos(Ventas venta)
+    {
+        return string.Join(", ", venta.Detalles.Select(d => $"Producto #{d.ProductoId} x {d.Cantidad}"));
+    }
+
+    private async Task Buscar()
+    {
+        var ventaId = filtroVentaId;
+        var concepto = filtroConcepto.Trim().ToLower();
+        var desde = fechaDesde?.Date;
+        var hastaExclusivo = fechaHasta?.Date.AddDays(1);
+
+        var resultado = await ventaService.GetList(v =>
+            (ventaId == null || v.VentaId == ventaId) &&
+            (concepto == "" ||
+                v.Observacion.ToLower().Contains(concepto)) &&
+            (desde == null || v.Fecha >= desde) &&
+            (hastaExclusivo == null || v.Fecha < hastaExclusivo));
+
+        lista = resultado.Value ?? new List<Ventas>();
+    }
+
+    private async Task Restablecer()
+    {
+        filtroVentaId = null;
+        filtroConcepto = string.Empty;
+        fechaDesde = null;
+        fechaHasta = null;
+        mensaje = null;
+        await Buscar();
+    }
+}
