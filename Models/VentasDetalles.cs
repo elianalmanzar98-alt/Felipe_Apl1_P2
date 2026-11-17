@@ -8,6 +8,7 @@ public class VentasDetalle
     [Key]
     public int DetalleId{get; set;}
     public int VentaId{get; set;}
+
     public int ProductoId{get;set;}
 
     [ForeignKey("ProductoId")]
@@ -15,7 +16,7 @@ public class VentasDetalle
 
     [Range(1, int.MaxValue, ErrorMessage ="la cantidad debe ser mayor que 0")]
     public int Cantidad{get; set;}
-    
+
     [Column(TypeName ="decimal(18,2)")]
     public decimal Precio{get;set;}
 }

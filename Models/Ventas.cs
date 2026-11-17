@@ -17,7 +17,7 @@ public class Ventas{
     public decimal Total{get; set;}
 
     [Column(TypeName ="decimal(18,2)")]
-    [ForeignKey("ventaId")]
+    [ForeignKey("VentaId")]
     public ICollection<VentasDetalle>Detalles {get; set;}=new List<VentasDetalle>();
 }
 
