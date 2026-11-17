@@ -1,4 +1,7 @@
 using Felipe_Ap1_P2.Components;
+using Microsoft.EntityFrameworkCore;
+using Felipe_Ap1_P2.Context;
+using Felipe_Ap1_P2.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -6,8 +9,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
-    var ConStr = builder.Configuration.GetConnectionString("SqlConStr");
-    builder.Services.AddDbContextFactory<contexto>(o => o.UseSqlite(ConStr));
+  var connectionString = builder.Configuration.GetConnectionString("SqlConstr");
+builder.Services.AddDbContextFactory<Contexto>(o => o.UseSqlite(connectionString));
+builder.Services.AddScoped<Services>();
 
 var app = builder.Build();
 

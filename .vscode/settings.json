@@ -1,0 +1,5 @@
+{
+    "appService.preDeployTask": "publish-release",
+    "appService.deploySubpath": "bin\\Release\\net10.0\\publish",
+    "appService.defaultWebAppToDeploy": "/subscriptions/c6926881-7ac7-4520-8988-bd6f1cbd5528/resourceGroups/ElianAPli1P2/providers/Microsoft.Web/sites/FelipeAP1P2"
+}
