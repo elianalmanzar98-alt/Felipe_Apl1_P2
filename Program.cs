@@ -17,6 +17,13 @@ builder.Services.AddScoped<ProductoService>();
 
 var app = builder.Build();
 
+using (var scope = app.Services.CreateScope())
+{
+    var factory = scope.ServiceProvider.GetRequiredService<IDbContextFactory<Contexto>>();
+    using var contexto = factory.CreateDbContext();
+    contexto.Database.Migrate();
+}
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
